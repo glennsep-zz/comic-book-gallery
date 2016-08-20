@@ -5,14 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using ComicBookGallery.Models;
+using ComicBookGallery.Data;
 
 namespace ComicBookGallery.Controllers
 {
     public class ComicBooksController : Controller
     {
-        public ActionResult Detail()
-        {            
-            return View();
+        private ComicBookRepository _comicBookRepository = null;
+
+        public ComicBooksController()
+        {
+            _comicBookRepository = new ComicBookRepository();
+        }
+
+        public ActionResult Detail(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            var comicBook = _comicBookRepository.GetComicBook(id.Value);
+
+            return View(comicBook);
         }
     }
 }
